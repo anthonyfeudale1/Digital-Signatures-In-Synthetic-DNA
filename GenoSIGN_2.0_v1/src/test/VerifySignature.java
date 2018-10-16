@@ -136,11 +136,15 @@ public class VerifySignature extends JFrame {
 							System.out.println("LENGTH = "+filecontent.length());
 							boolean isRevComp = false;
 							boolean isNormal = false;
-							String signatureSeq = null;
-							String orcidSeq = null;
-							String plasmidIDSeq = null;
-							String originalSeq = null;
-							String eccSeq = null;
+
+							//TODOD: NEED TO MODIFY THESE
+
+							String orcidSeq = null; //32 base pair after start tag
+							String plasmidIDSeq = null; //12 base pairs after orcid
+							String signatureSeq = null; //512 base pair signature
+							String eccSeq = null; //error correction signature after signature before end, variable length
+							String originalSeq = null; //actual signed message
+
 							String filecontentRevComp = generateReverseComplement(filecontent);
 							
 							if(filecontent.contains(startTag) || filecontent.contains(endTag)) {								
@@ -198,9 +202,11 @@ public class VerifySignature extends JFrame {
 										System.out.println("ECC LENGTH = " + eccSeq.length());
 
 									}
-									
+
+
+
 									String signedSeq = originalSeq.concat(plasmidIDSeq);
-									
+									//End Modifications here
 									if (signatureSeq.length() == 512) {
 										
 										try {
