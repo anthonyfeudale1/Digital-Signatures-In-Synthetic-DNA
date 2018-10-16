@@ -6,7 +6,9 @@ public class StringDistance {
 
 
     static ArrayList<String> getComponents(String orcidSeq, String plasmidIDSeq, String signatureSeq, String eccSeq, String originalSeq, String filecontent) {
+        ArrayList<String> components = new ArrayList<>();
 
 
+        return components;
     }
 }
