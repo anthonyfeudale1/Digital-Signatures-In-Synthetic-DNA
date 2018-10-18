@@ -134,8 +134,7 @@ public class VerifySignature extends JFrame {
 							System.out.println("FILE CONTENT");
 							System.out.println(filecontent);
 							System.out.println("LENGTH = "+filecontent.length());
-							boolean isRevComp = false;
-							boolean isNormal = false;
+
 
 							//TODOD: NEED TO MODIFY THESE
 
@@ -145,49 +144,24 @@ public class VerifySignature extends JFrame {
 							String eccSeq = null; //error correction signature after signature before end, variable length
 							String originalSeq = null; //actual signed message
 
-							String filecontentRevComp = generateReverseComplement(filecontent);
+
+							ArrayList<String> components = StringDistance.getComponents(orcidSeq, plasmidIDSeq, signatureSeq,  eccSeq,
+									originalSeq, filecontent, startTag, endTag);
+
+							orcidSeq = components.get(0);
+							plasmidIDSeq = components.get(1);
+							signatureSeq = components.get(2);
+							eccSeq = components.get(3);
+							originalSeq = components.get(4);
+							filecontent = components.get(5);
+
+							//If no start or end tags are found, orcidSeq is left null, and indicates we cannot procede
+							boolean hasTags = false;
+							if(orcidSeq != null)
+								hasTags = true;
+
 							
-							if(filecontent.contains(startTag) || filecontent.contains(endTag)) {								
-								isNormal = true;
-							}
-							
-							if(filecontentRevComp.contains(startTag) || filecontentRevComp.contains(endTag)) {
-								isRevComp = true;
-							}
-							
-							if(isRevComp || isNormal) {
-								if(isNormal) {
-									String repeatMsg = filecontent.concat(filecontent).concat(filecontent).trim();
-									if(repeatMsg.indexOf(startTag)!= repeatMsg.lastIndexOf(startTag)) {
-										
-										String temp = StringUtils.substringBetween(repeatMsg, startTag, startTag);
-										orcidSeq = temp.substring(0, 32);
-										plasmidIDSeq = temp.substring(32, 44);
-										signatureSeq = temp.substring(44, 556);
-										eccSeq = StringUtils.substringBetween(temp, signatureSeq, endTag);
-										originalSeq = StringUtils.substringAfterLast(temp, endTag);
-									}
-									else {
-										JOptionPane.showMessageDialog(null, "CANNOT EXTRACT PARTS , ONLY ONE INSTANCE OF START IN COMBINED MSG",
-												"alert", JOptionPane.ERROR_MESSAGE);
-									}
-								}
-								else if(isRevComp) {
-									String repeatMsg = filecontentRevComp.concat(filecontentRevComp).concat(filecontentRevComp).trim();
-									if(repeatMsg.indexOf(startTag)!= repeatMsg.lastIndexOf(startTag)) {
-										
-										String temp = StringUtils.substringBetween(repeatMsg, startTag, startTag);
-										orcidSeq = temp.substring(0, 32);
-										plasmidIDSeq = temp.substring(32, 44);
-										signatureSeq = temp.substring(44, 556);
-										eccSeq = StringUtils.substringBetween(temp, signatureSeq, endTag);
-										originalSeq = StringUtils.substringAfterLast(temp, endTag);
-									}
-									else {
-										JOptionPane.showMessageDialog(null, "CANNOT EXTRACT PARTS , ONLY ONE INSTANCE OF START IN COMBINED MSG",
-												"alert", JOptionPane.ERROR_MESSAGE);
-									}
-								}
+							if(hasTags) {
 								
 								if(!orcidSeq.isEmpty() && !plasmidIDSeq.isEmpty() && !signatureSeq.isEmpty() && !originalSeq.isEmpty()) {
 									String identity = extractIdentity(orcidSeq);
@@ -492,7 +466,7 @@ public class VerifySignature extends JFrame {
 		contentPane.add(btnVerifySignature);
 	}
 	
-	private String generateReverseComplement(String filecontent) {
+	static String generateReverseComplement(String filecontent) {
 		// TODO Auto-generated method stub
 		StringBuilder binaryString = new StringBuilder();
 		char[] dnasign = filecontent.toCharArray();
@@ -525,7 +499,7 @@ public class VerifySignature extends JFrame {
 	 * @return idenitity in ORCID format
 	 * 
 	 */
-	private String extractIdentity(String idSeq) {
+	static String extractIdentity(String idSeq) {
 		StringBuilder sb = new StringBuilder();
 		// System.out.println(temp);
 		if (idSeq.length() == 32) {
@@ -578,7 +552,7 @@ public class VerifySignature extends JFrame {
 	 * @return plasmid ID in number format
 	 * 
 	 */
-	private String extractPlasmidID(String pidSeq) {
+	static String extractPlasmidID(String pidSeq) {
 		StringBuilder sb = new StringBuilder();
 		// System.out.println(temp);
 		if (pidSeq.length() == 12) {
