@@ -33,9 +33,11 @@ import java.awt.event.ActionEvent;
 //This class is to pasre the FATSA files 
 public class FastaParsing {
 	
-	public static ArrayList<String> gene_sequence(){
+	public static ArrayList<String> gene_sequence(String fileContent){
 		ArrayList<String> gene_squence;
-		String fileContent = Utilities.ExtratTextFromFSTAFile();
+		fileContent = fileContent.replaceAll("\\s", "");
+		String tempSeq1=fileContent.replaceAll("\\d","");
+		tempSeq1=tempSeq1.replaceAll("\\W","");
 		//read the contents of FASTA file
 		gene_squence=splitEqually(fileContent,10);
 		return gene_squence;
