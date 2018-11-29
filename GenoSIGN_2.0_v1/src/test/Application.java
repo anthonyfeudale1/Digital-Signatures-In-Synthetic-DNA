@@ -1,3 +1,4 @@
+package test;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Collections;
@@ -41,7 +42,8 @@ public class Application {
 
     public static void main(String[] args) throws IOException {
     	//Parse the fasta file to extract gene sequence
-    	ArrayList<String>  gene_sequence=FastaParsing.gene_sequence();
+		String file = "";
+    	ArrayList<String>  gene_sequence=FastaParsing.gene_sequence(file);
     	String original_startTag = "acgcttcgca";
         String original_endTag = "gtatcctatg";
         
