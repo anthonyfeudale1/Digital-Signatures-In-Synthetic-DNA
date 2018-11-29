@@ -84,12 +84,7 @@ public class StringDistance {
                 String repeatMsg = filecontent.concat(filecontent).concat(filecontent).trim();
                 if (repeatMsg.indexOf(startTag) != repeatMsg.lastIndexOf(startTag)) {
 
-                    String temp = StringUtils.substringBetween(repeatMsg, startTag, startTag);
-                    orcidSeq = temp.substring(0, 32);
-                    plasmidIDSeq = temp.substring(32, 44);
-                    signatureSeq = temp.substring(44, 556);
-                    eccSeq = StringUtils.substringBetween(temp, signatureSeq, endTag);
-                    originalSeq = StringUtils.substringAfterLast(temp, endTag);
+                	components= extractData(filecontent,startTag,endTag );
                     
                 } else {
                     JOptionPane.showMessageDialog(null, "CANNOT EXTRACT PARTS , ONLY ONE INSTANCE OF START IN COMBINED MSG",
@@ -100,12 +95,7 @@ public class StringDistance {
                 String repeatMsg = filecontentRevComp.concat(filecontentRevComp).concat(filecontentRevComp).trim();
                 if (repeatMsg.indexOf(startTag) != repeatMsg.lastIndexOf(startTag)) {
 
-                    String temp = StringUtils.substringBetween(repeatMsg, startTag, endTag);
-                    orcidSeq = temp.substring(0, 32);
-                    plasmidIDSeq = temp.substring(32, 44);
-                    signatureSeq = temp.substring(44, 556);
-                    eccSeq = StringUtils.substringBetween(temp, signatureSeq, endTag);
-                    originalSeq = StringUtils.substringAfterLast(temp, endTag);
+                	components= extractData(filecontentRevComp,startTag,endTag );
                 } else {
                     JOptionPane.showMessageDialog(null, "CANNOT EXTRACT PARTS , ONLY ONE INSTANCE OF START IN COMBINED MSG",
                             "alert", JOptionPane.ERROR_MESSAGE);
